@@ -1,40 +1,62 @@
-// Crie e exporte uma função que retorna uma estrutura HTML.
-// Nomeie a função como `Home`, lembrando-se sempre de usar a primeira letra maiuscula.
-// Inclua uma tag `<h1>` dentro da função, e insira um texto relacionado ao tema escolhido.
+import { useState } from "react";
 
-// Crie um estado chamado `arrayProdutos` para armazenar uma lista de objetos.
-// Inicialize o estado com, no mínimo, 5 objetos, cada um contendo 4 propriedades, incluindo um `id` único.
-// Lembre-se de importar o `useState` do módulo `react` para utilizar o estado.
+export default function Home () {
 
-// Crie um elemento `<div>`.
-// Utilize o método `map` para listar cada objeto da `arrayProdutos`
-// dentro desse `<div>`.
+    const [listaProdutos, setProdutos] = useState ([
+        {id: 1, nome: 'Bola Oficial de Voleibol Mikasa V200W', preco: 'R$ 949,99'},
+        {id: 2, nome: 'Bola Vôlei Penalty 8.0 Pró Ix', preco: 'R$ 498,99'},
+        {id: 3, nome: 'Joelheira com Proteção - Linha SPRY Preto', preco: 'R$ 259,00'},
+        {id: 4, nome: 'Joelheira com Proteção - Linha SPRY Branco', preco: 'R$ 259,00'},
+        {id: 5, nome: 'Protetor de Antebraço - Linha CBV Preto', preco: 'R$ 201,00'},
+        {id: 6, nome: 'Protetor de Antebraço - Linha CBV Branco', preco: 'R$ 201,00'},
+        {id: 7, nome: 'Tênis Nike Giannis Immortality 3 Masculino - Branco e Azul ', preco: 'R$ 599,99'},
+        {id: 8, nome: 'Tênis Nike Kyrie 7 Masculino - Copa', preco: 'R$ 799,99'}
+    ])
 
-// Crie o estado `meusPedidos`.
-// Dentro do componente, crie a função `adicionarItemPedidos`.
-// A função recebe um parâmetro, que pode ser nomeado como `produto`.
-// Dentro da função, utilize `setMeusPedidos` para adicionar o `produto` à `meusPedidos`.
-// Exemplo: `setMeusPedidos([...arrayPedidos, produto]);`
+    const [listaPedidos, setListaPedidos] = useState([]);
 
-// Para cada objeto renderizado, adicione um botão.
-// Utilize o atributo onClick para o botão.
-// No valor do onClick, passe a função adicionarItemPedidos, 
-// por exemplo: onClick={() => adicionarItemPedidos(pedido)}
-// No conteúdo do botão, coloque o texto "Selecionar" ou algo semelhante.
+    const adicionarItemPedidos = (pedido) => {
+        setListaPedidos([...listaPedidos, pedido])
+    }
 
-// Crie um elemento `<div>`.
-// Utilize o método `map` para listar cada objeto da `arrayPedidos`
-// dentro desse `<div>`.
+    const removerPedido = (id) => {
+        let remover = false;
+        let listaAux = listaPedidos.filter((produto) => {
+            if (remover == false) {
+                if (produto.id !== id) {
+                    return produto
+                } else {
+                    remover = true;
+                    return null
+                }
+            } else {
+                return produto
+            }
+        });
+        setListaPedidos(listaAux);
+    }
 
-// Dentro do componente, crie a função `removerItemPedidos`.
-// A função recebe um parâmetro `id`, que é o identificador do item a ser removido.
-// Crie uma variável `listaAux` para armazenar a lista filtrada sem o item com o `id` fornecido.
-// Utilize `setListaPedidos` para atualizar o estado com a nova lista filtrada.
-// Exemplo: `setListaPedidos(listaAux);`
-
-// Dentro do `map`, crie um botão para cada item.
-// Utilize o atributo `onClick` para definir a ação do botão.
-// No valor do `onClick`, chame a função `removerItemPedidos`.
-// Passe o identificador (`id`) do item como parâmetro para `removerItemPedidos`, o mesmo que você usa no `map`.
-// No conteúdo do botão, coloque o texto "Remover".
-
+    return (
+        <div>
+          <h1> Itens para volei</h1>
+            {
+                listaProdutos.map((produto) => 
+                    <div key={produto.id}>
+                        <p>{produto.nome}</p>
+                        <p>{produto.preco}</p>
+                        <button onClick={() => adicionarItemPedidos(produto)}>Adicionar</button>
+                    </div>
+                )
+            }
+            {
+            listaPedidos.map((produto) => 
+                <div key={produto.id}>
+                    <p>{produto.nome}</p>
+                    <p>{produto.preco}</p>
+                    <button onClick={() => removerPedido(produto.id)}>Remover</button>
+                </div>
+            )
+          }
+        </div>
+    );
+}
